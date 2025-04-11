@@ -1,93 +1,81 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 
-// Contexto para gestionar sermones
+// Contexto para sermones
 const SermonContext = createContext({
   currentSermon: null,
   loadingSermon: false,
   sermonHistory: [],
   generateSermon: () => {},
   restoreSermon: () => {},
-  removeFromHistory: () => {},
+  clearHistory: () => {},
 });
 
-// Hook personalizado para usar el contexto
+// Hook personalizado
 export const useSermonContext = () => useContext(SermonContext);
 
-// Máximo de sermones en historial
-const MAX_HISTORY_SIZE = 10;
-
-// Proveedor del contexto de sermones
+// Proveedor del contexto
 export const SermonContextProvider = ({ children }) => {
-  // Estado para el sermón actual
   const [currentSermon, setCurrentSermon] = useState(null);
-  // Estado para indicar carga de sermón
   const [loadingSermon, setLoadingSermon] = useState(false);
-  // Estado para el historial de sermones
   const [sermonHistory, setSermonHistory] = useState([]);
   
-  // Carga historial desde localStorage al iniciar
+  // Cargar historial desde localStorage al inicio
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const storedHistory = localStorage.getItem('sermonHistory');
-      if (storedHistory) {
-        try {
-          setSermonHistory(JSON.parse(storedHistory));
-        } catch (error) {
-          console.error('Error parsing sermon history:', error);
-          localStorage.removeItem('sermonHistory');
-        }
+    const savedHistory = localStorage.getItem('sermonHistory');
+    if (savedHistory) {
+      try {
+        setSermonHistory(JSON.parse(savedHistory));
+      } catch (error) {
+        console.error('Error parsing sermon history:', error);
       }
     }
   }, []);
   
-  // Guarda historial en localStorage cuando cambia
-  useEffect(() => {
-    if (typeof window !== 'undefined' && sermonHistory.length > 0) {
-      localStorage.setItem('sermonHistory', JSON.stringify(sermonHistory));
-    }
-  }, [sermonHistory]);
-  
-  // Función para generar un nuevo sermón
+  // Función para generar un sermón
   const generateSermon = async (params) => {
     setLoadingSermon(true);
-    try {
-      // Llamada a la API
-      const response = await fetch('/api/generate-sermon', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(params),
-      });
+    
+    // Simular tiempo de carga
+    setTimeout(() => {
+      // Generar sermón (simulado)
+      const sermon = {
+        title: `${params.topic}: Un mensaje de esperanza`,
+        verse: params.verse,
+        style: params.style,
+        length: params.length,
+        introduction: `Reflexionar sobre ${params.topic} es fundamental para nuestra fe cristiana...`,
+        points: [
+          { 
+            title: `El origen bíblico de ${params.topic}`, 
+            content: `Las escrituras nos enseñan sobre ${params.topic} desde el principio...` 
+          },
+          { 
+            title: `${params.topic} en la vida de Jesús`, 
+            content: `Cristo nos mostró ${params.topic} a través de su ejemplo...` 
+          },
+          { 
+            title: `Aplicando ${params.topic} hoy`, 
+            content: `En nuestro mundo actual, ${params.topic} sigue siendo relevante...` 
+          }
+        ],
+        conclusion: `Al reflexionar sobre ${params.topic}, somos desafiados a examinar nuestras propias vidas...`,
+        application: [
+          `Dedica tiempo diario a estudiar sobre ${params.topic} en la Biblia`,
+          `Identifica áreas donde puedes aplicar ${params.topic} esta semana`,
+          `Comparte con otros lo que has aprendido sobre ${params.topic}`
+        ],
+        timestamp: Date.now()
+      };
       
-      if (!response.ok) {
-        throw new Error('Error generating sermon');
-      }
-      
-      const data = await response.json();
-      setCurrentSermon(data.sermon);
-      
-      // Añade al historial, limitando tamaño
-      setSermonHistory(prev => {
-        // Evita duplicados (mismo tema y versículo)
-        const isDuplicate = prev.some(
-          sermon => sermon.metadata?.topic === data.sermon.metadata?.topic && 
-                   sermon.metadata?.verse === data.sermon.metadata?.verse
-        );
-        
-        if (isDuplicate) return prev;
-        
-        // Añade al inicio, limita tamaño
-        const updated = [data.sermon, ...prev].slice(0, MAX_HISTORY_SIZE);
-        return updated;
-      });
-      
-    } catch (error) {
-      console.error('Error generating sermon:', error);
-      // Aquí podrías manejar errores, mostrar notificaciones, etc.
-    } finally {
+      // Actualizar estado
+      setCurrentSermon(sermon);
       setLoadingSermon(false);
-    }
+      
+      // Añadir al historial
+      const updatedHistory = [sermon, ...sermonHistory].slice(0, 10);
+      setSermonHistory(updatedHistory);
+      localStorage.setItem('sermonHistory', JSON.stringify(updatedHistory));
+    }, 2000);
   };
   
   // Función para restaurar un sermón del historial
@@ -95,32 +83,23 @@ export const SermonContextProvider = ({ children }) => {
     setCurrentSermon(sermon);
   };
   
-  // Función para eliminar un sermón del historial
-  const removeFromHistory = (index) => {
-    setSermonHistory(prev => {
-      const updated = [...prev];
-      updated.splice(index, 1);
-      
-      // Si se elimina el único sermón, limpia localStorage
-      if (updated.length === 0 && typeof window !== 'undefined') {
-        localStorage.removeItem('sermonHistory');
-      }
-      
-      return updated;
-    });
+  // Función para limpiar el historial
+  const clearHistory = () => {
+    if (window.confirm('¿Estás seguro de que deseas borrar todo el historial de sermones?')) {
+      setSermonHistory([]);
+      localStorage.removeItem('sermonHistory');
+    }
   };
   
   return (
-    <SermonContext.Provider
-      value={{
-        currentSermon,
-        loadingSermon,
-        sermonHistory,
-        generateSermon,
-        restoreSermon,
-        removeFromHistory
-      }}
-    >
+    <SermonContext.Provider value={{
+      currentSermon,
+      loadingSermon,
+      sermonHistory,
+      generateSermon,
+      restoreSermon,
+      clearHistory
+    }}>
       {children}
     </SermonContext.Provider>
   );

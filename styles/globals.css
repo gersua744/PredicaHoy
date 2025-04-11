@@ -1,4 +1,98 @@
-body {
+/* globals.css */
+
+/* Estilos globales */
+* {
   margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Fondo general y fuentes */
+body {
   font-family: 'Roboto', sans-serif;
+  background-color: #fafafa;
+  color: #333;
+  padding: 20px;
+}
+
+h1, h2 {
+  font-weight: 500;
+  color: #3f51b5;
+}
+
+/* Contenedor principal */
+div {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  background-color: white;
+}
+
+/* Formulario */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Campos de entrada */
+input, select, button {
+  padding: 12px;
+  font-size: 16px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+input[type="text"] {
+  width: 100%;
+}
+
+/* Botones */
+button {
+  background-color: #3f51b5;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: #303f9f;
+}
+
+/* Estilos para la sección de resultados */
+h2 {
+  margin-top: 30px;
+  font-size: 1.5em;
+  color: #3f51b5;
+}
+
+div button {
+  margin-top: 20px;
+}
+
+/* Estilos responsivos */
+@media (max-width: 768px) {
+  div {
+    padding: 15px;
+  }
+
+  input, select, button {
+    font-size: 14px;
+  }
+
+  h1 {
+    font-size: 1.8em;
+  }
+
+  form {
+    gap: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  h1 {
+    font-size: 1.5em;
+  }
 }

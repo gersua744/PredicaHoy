@@ -7,6 +7,7 @@ import { SermonContextProvider } from '../contexts/SermonContext';
 import createEmotionCache from '../utils/createEmotionCache';
 import '../styles/globals.css';
 
+// Cliente-side cache compartido para toda la sesión
 const clientSideEmotionCache = createEmotionCache();
 
 export default function MyApp(props) {
@@ -17,7 +18,8 @@ export default function MyApp(props) {
       <Head>
         <title>PredicaHoy - Generador de Sermones</title>
         <meta name="viewport" content="initial-scale=1, width=device-width" />
-        <meta name="description" content="Generador de sermones cristianos personalizados" />
+        <link rel="icon" href="/favicon.ico" />
+        <meta name="description" content="Genera sermones cristianos de manera fácil y rápida" />
       </Head>
       <ThemeContextProvider>
         {(theme) => (

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PredicaHoy</title>
+  <link href="style.css" rel="stylesheet">
+</head>
+<body>
+  <div class="container">
+    <h1>PredicaHoy</h1>
+    <textarea id="tema" placeholder="Escribe el tema de la prédica..."></textarea>
+    <button onclick="generarPredica()">Generar Prédica</button>
+    <div id="resultado"></div>
+    <div class="botones">
+      <button onclick="copiar()">Copiar</button>
+      <button onclick="descargar()">Descargar</button>
+      <button onclick="cambiarTema()">Cambiar Tema</button>
+    </div>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>

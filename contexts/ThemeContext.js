@@ -1,7 +1,7 @@
 import React, { createContext, useState, useMemo, useContext, useEffect } from 'react';
 import { createTheme } from '@mui/material/styles';
 
-// Colores base para los temas
+// Configuración de temas con estilos específicos
 const themeOptions = {
   light: {
     palette: {
@@ -95,14 +95,13 @@ const ThemeContext = createContext({
   theme: null
 });
 
-// Hook personalizado para usar el contexto
+// Hook personalizado
 export const useThemeContext = () => useContext(ThemeContext);
 
 // Proveedor del contexto
 export const ThemeContextProvider = ({ children }) => {
   // Verifica si estamos en el navegador
   const isBrowser = typeof window !== 'undefined';
-  // Obtiene el modo guardado o usa 'light' por defecto
   const storedMode = isBrowser ? localStorage.getItem('themeMode') : 'light';
   
   // Estado para el modo actual
@@ -133,3 +132,4 @@ export const ThemeContextProvider = ({ children }) => {
     </ThemeContext.Provider>
   );
 };
+

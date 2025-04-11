@@ -8,8 +8,7 @@ import {
   Select, 
   MenuItem, 
   Button, 
-  Box, 
-  Grid,
+  Box,
   useTheme
 } from '@mui/material';
 import CreateIcon from '@mui/icons-material/Create';
@@ -74,87 +73,75 @@ const SermonForm = () => {
       onSubmit={handleSubmit}
       sx={{
         p: 3,
-        mb: 4,
-        borderRadius: 2
+        mb: 4
       }}
     >
-      <Typography variant="h5" component="h2" gutterBottom align="center" sx={{ mb: 3, fontWeight: 500 }}>
-        Genera tu sermón
+      <Typography variant="h6" component="h2" gutterBottom>
+        Genera tu Sermón
       </Typography>
       
-      <Grid container spacing={3}>
-        <Grid item xs={12} md={6}>
-          <TextField
-            fullWidth
-            label="Tema del sermón"
-            name="topic"
-            value={formData.topic}
-            onChange={handleChange}
-            error={!!formErrors.topic}
-            helperText={formErrors.topic || 'Ej: El amor de Dios, La oración, El perdón'}
-            margin="normal"
-            required
-            variant="outlined"
-          />
-        </Grid>
-        
-        <Grid item xs={12} md={6}>
-          <TextField
-            fullWidth
-            label="Versículo base (opcional)"
-            name="verse"
-            value={formData.verse}
-            onChange={handleChange}
-            helperText="Ej: Juan 3:16, Salmos 23:1, Romanos 8:28"
-            margin="normal"
-            variant="outlined"
-          />
-        </Grid>
-        
-        <Grid item xs={12} md={6}>
-          <FormControl fullWidth margin="normal" variant="outlined">
-            <InputLabel id="style-label">Estilo del mensaje</InputLabel>
-            <Select
-              labelId="style-label"
-              name="style"
-              value={formData.style}
-              onChange={handleChange}
-              label="Estilo del mensaje"
-            >
-              <MenuItem value="expositivo">Expositivo</MenuItem>
-              <MenuItem value="tematico">Temático</MenuItem>
-              <MenuItem value="evangelistico">Evangelístico</MenuItem>
-              <MenuItem value="devocional">Devocional</MenuItem>
-            </Select>
-          </FormControl>
-        </Grid>
-        
-        <Grid item xs={12} md={6}>
-          <FormControl fullWidth margin="normal" variant="outlined">
-            <InputLabel id="length-label">Longitud del sermón</InputLabel>
-            <Select
-              labelId="length-label"
-              name="length"
-              value={formData.length}
-              onChange={handleChange}
-              label="Longitud del sermón"
-            >
-              <MenuItem value="short">Corto (5-10 min)</MenuItem>
-              <MenuItem value="medium">Medio (15-20 min)</MenuItem>
-              <MenuItem value="long">Largo (25-30 min)</MenuItem>
-            </Select>
-          </FormControl>
-        </Grid>
-      </Grid>
+      <TextField
+        fullWidth
+        label="Tema del Sermón"
+        name="topic"
+        value={formData.topic}
+        onChange={handleChange}
+        error={!!formErrors.topic}
+        helperText={formErrors.topic || 'Ej: El amor de Dios, La oración, El perdón'}
+        margin="normal"
+        required
+        variant="outlined"
+      />
       
-      <Box sx={{ mt: 4, textAlign: 'center' }}>
+      <TextField
+        fullWidth
+        label="Versículo Base (opcional)"
+        name="verse"
+        value={formData.verse}
+        onChange={handleChange}
+        helperText="Ej: Juan 3:16, Salmos 23:1, Romanos 8:28"
+        margin="normal"
+        variant="outlined"
+      />
+      
+      <FormControl fullWidth margin="normal" variant="outlined">
+        <InputLabel id="style-label">Estilo del Mensaje</InputLabel>
+        <Select
+          labelId="style-label"
+          name="style"
+          value={formData.style}
+          onChange={handleChange}
+          label="Estilo del Mensaje"
+        >
+          <MenuItem value="expositivo">Expositivo</MenuItem>
+          <MenuItem value="tematico">Temático</MenuItem>
+          <MenuItem value="evangelistico">Evangelístico</MenuItem>
+          <MenuItem value="devocional">Devocional</MenuItem>
+        </Select>
+      </FormControl>
+      
+      <FormControl fullWidth margin="normal" variant="outlined">
+        <InputLabel id="length-label">Longitud del Sermón</InputLabel>
+        <Select
+          labelId="length-label"
+          name="length"
+          value={formData.length}
+          onChange={handleChange}
+          label="Longitud del Sermón"
+        >
+          <MenuItem value="short">Corto (5-10 min)</MenuItem>
+          <MenuItem value="medium">Medio (15-20 min)</MenuItem>
+          <MenuItem value="long">Largo (25-30 min)</MenuItem>
+        </Select>
+      </FormControl>
+      
+      <Box sx={{ mt: 3, textAlign: 'center' }}>
         <Button 
           type="submit" 
           variant="contained" 
           color="primary" 
           size="large"
           startIcon={<CreateIcon />}
-          sx={{ px: 4, py: 1 }}
         >
           Generar Sermón
         </Button>
@@ -165,3 +152,5 @@ const SermonForm = () => {
 
 export default SermonForm;
 
+  
+ 

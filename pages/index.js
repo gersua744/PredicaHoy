@@ -11,9 +11,11 @@ export default function Home() {
 
   return (
     <Layout>
-      <Container maxWidth="lg" sx={{ py: 4 }}>
+      <Container maxWidth="lg">
+        {/* Formulario para generar sermones */}
         <SermonForm />
         
+        {/* Muestra el sermón generado o el estado de carga */}
         {(currentSermon || loadingSermon) && (
           <SermonOutput 
             sermon={currentSermon} 
@@ -21,6 +23,7 @@ export default function Home() {
           />
         )}
         
+        {/* Historial de sermones generados */}
         <History />
       </Container>
     </Layout>

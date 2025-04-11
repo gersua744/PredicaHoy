@@ -1,32 +1,16 @@
 import React, { useState } from 'react';
-import { 
-  Paper, 
-  Typography, 
-  TextField, 
-  FormControl, 
-  InputLabel, 
-  Select, 
-  MenuItem, 
-  Button, 
-  Box,
-  useTheme
-} from '@mui/material';
-import CreateIcon from '@mui/icons-material/Create';
+import { Box, Paper, Typography, TextField, FormControl, InputLabel, Select, MenuItem, Button } from '@mui/material';
+import FlashOnIcon from '@mui/icons-material/FlashOn';
 import { useSermonContext } from '../contexts/SermonContext';
 
 const SermonForm = () => {
-  const theme = useTheme();
   const { generateSermon } = useSermonContext();
   
   const [formData, setFormData] = useState({
     topic: '',
     verse: '',
-    style: 'expositivo',
-    length: 'medium'
-  });
-  
-  const [formErrors, setFormErrors] = useState({
-    topic: ''
+    style: '',
+    length: ''
   });
   
   const handleChange = (e) => {
@@ -35,113 +19,142 @@ const SermonForm = () => {
       ...prev,
       [name]: value
     }));
-    
-    // Validación
-    if (name === 'topic' && !value.trim()) {
-      setFormErrors(prev => ({
-        ...prev,
-        topic: 'El tema es requerido'
-      }));
-    } else if (name === 'topic') {
-      setFormErrors(prev => ({
-        ...prev,
-        topic: ''
-      }));
-    }
   };
   
   const handleSubmit = (e) => {
     e.preventDefault();
-    
-    // Validar antes de enviar
-    if (!formData.topic.trim()) {
-      setFormErrors(prev => ({
-        ...prev,
-        topic: 'El tema es requerido'
-      }));
-      return;
-    }
-    
-    // Enviar datos para generar sermón
     generateSermon(formData);
   };
   
   return (
     <Paper 
-      elevation={3} 
-      component="form" 
-      onSubmit={handleSubmit}
-      sx={{
-        p: 3,
-        mb: 4
+      elevation={4} 
+      sx={{ 
+        p: 3, 
+        mb: 4,
+        borderRadius: 2
       }}
     >
-      <Typography variant="h6" component="h2" gutterBottom>
+      <Typography variant="h6" fontWeight="600" mb={3}>
         Genera tu Sermón
       </Typography>
       
-      <TextField
-        fullWidth
-        label="Tema del Sermón"
-        name="topic"
-        value={formData.topic}
-        onChange={handleChange}
-        error={!!formErrors.topic}
-        helperText={formErrors.topic || 'Ej: El amor de Dios, La oración, El perdón'}
-        margin="normal"
-        required
-        variant="outlined"
-      />
-      
-      <TextField
-        fullWidth
-        label="Versículo Base (opcional)"
-        name="verse"
-        value={formData.verse}
-        onChange={handleChange}
-        helperText="Ej: Juan 3:16, Salmos 23:1, Romanos 8:28"
-        margin="normal"
-        variant="outlined"
-      />
-      
-      <FormControl fullWidth margin="normal" variant="outlined">
-        <InputLabel id="style-label">Estilo del Mensaje</InputLabel>
-        <Select
-          labelId="style-label"
-          name="style"
-          value={formData.style}
-          onChange={handleChange}
-          label="Estilo del Mensaje"
-        >
-          <MenuItem value="expositivo">Expositivo</MenuItem>
-          <MenuItem value="tematico">Temático</MenuItem>
-          <MenuItem value="evangelistico">Evangelístico</MenuItem>
-          <MenuItem value="devocional">Devocional</MenuItem>
-        </Select>
-      </FormControl>
-      
-      <FormControl fullWidth margin="normal" variant="outlined">
-        <InputLabel id="length-label">Longitud del Sermón</InputLabel>
-        <Select
-          labelId="length-label"
-          name="length"
-          value={formData.length}
-          onChange={handleChange}
-          label="Longitud del Sermón"
-        >
-          <MenuItem value="short">Corto (5-10 min)</MenuItem>
-          <MenuItem value="medium">Medio (15-20 min)</MenuItem>
-          <MenuItem value="long">Largo (25-30 min)</MenuItem>
-        </Select>
-      </FormControl>
-      
-      <Box sx={{ mt: 3, textAlign: 'center' }}>
-        <Button 
-          type="submit" 
-          variant="contained" 
-          color="primary" 
+      <Box component="form" onSubmit={handleSubmit} sx={{ '& > *': { mb: 3 } }}>
+        <Box>
+          <InputLabel sx={{ mb: 1, fontSize: 14, fontWeight: 500 }}>
+            Tema del Sermón
+          </InputLabel>
+          <TextField
+            fullWidth
+            name="topic"
+            value={formData.topic}
+            onChange={handleChange}
+            placeholder="Ej: El amor de Dios, La fe, El perdón..."
+            required
+            variant="outlined"
+            sx={{ 
+              '& .MuiOutlinedInput-root': {
+                borderRadius: 1,
+                '&.Mui-focused fieldset': {
+                  borderColor: 'primary.main',
+                  boxShadow: '0 0 0 3px rgba(59, 130, 246, 0.3)',
+                }
+              }
+            }}
+          />
+        </Box>
+        
+        <Box>
+          <InputLabel sx={{ mb: 1, fontSize: 14, fontWeight: 500 }}>
+            Versículo Base (opcional)
+          </InputLabel>
+          <TextField
+            fullWidth
+            name="verse"
+            value={formData.verse}
+            onChange={handleChange}
+            placeholder="Ej: Juan 3:16, Salmos 23, etc."
+            variant="outlined"
+            sx={{ 
+              '& .MuiOutlinedInput-root': {
+                borderRadius: 1,
+                '&.Mui-focused fieldset': {
+                  borderColor: 'primary.main',
+                  boxShadow: '0 0 0 3px rgba(59, 130, 246, 0.3)',
+                }
+              }
+            }}
+          />
+        </Box>
+        
+        <Box>
+          <InputLabel sx={{ mb: 1, fontSize: 14, fontWeight: 500 }}>
+            Estilo del Mensaje
+          </InputLabel>
+          <FormControl fullWidth required>
+            <Select
+              name="style"
+              value={formData.style}
+              onChange={handleChange}
+              displayEmpty
+              sx={{ 
+                borderRadius: 1,
+                '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                  borderColor: 'primary.main',
+                  boxShadow: '0 0 0 3px rgba(59, 130, 246, 0.3)',
+                }
+              }}
+            >
+              <MenuItem value="" disabled>Selecciona un estilo</MenuItem>
+              <MenuItem value="expositivo">Expositivo</MenuItem>
+              <MenuItem value="tematico">Temático</MenuItem>
+              <MenuItem value="evangelistico">Evangelístico</MenuItem>
+              <MenuItem value="devocional">Devocional</MenuItem>
+              <MenuItem value="narrativo">Narrativo</MenuItem>
+            </Select>
+          </FormControl>
+        </Box>
+        
+        <Box>
+          <InputLabel sx={{ mb: 1, fontSize: 14, fontWeight: 500 }}>
+            Longitud del Sermón
+          </InputLabel>
+          <FormControl fullWidth required>
+            <Select
+              name="length"
+              value={formData.length}
+              onChange={handleChange}
+              displayEmpty
+              sx={{ 
+                borderRadius: 1,
+                '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                  borderColor: 'primary.main',
+                  boxShadow: '0 0 0 3px rgba(59, 130, 246, 0.3)',
+                }
+              }}
+            >
+              <MenuItem value="" disabled>Selecciona una longitud</MenuItem>
+              <MenuItem value="corto">Corto (5-10 minutos)</MenuItem>
+              <MenuItem value="medio">Medio (15-20 minutos)</MenuItem>
+              <MenuItem value="largo">Largo (30+ minutos)</MenuItem>
+            </Select>
+          </FormControl>
+        </Box>
+        
+        <Button
+          type="submit"
+          variant="contained"
+          color="primary"
+          fullWidth
           size="large"
-          startIcon={<CreateIcon />}
+          startIcon={<FlashOnIcon />}
+          sx={{ 
+            py: 1.5, 
+            borderRadius: 1, 
+            textTransform: 'none',
+            fontWeight: 500,
+            fontSize: 16
+          }}
         >
           Generar Sermón
         </Button>

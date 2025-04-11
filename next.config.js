@@ -1,6 +1,5 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {
+// next.config.js
+module.exports = {
   reactStrictMode: true,
+  swcMinify: true, // Para optimizar el minificado de JavaScript
 }
-
-module.exports = nextConfig

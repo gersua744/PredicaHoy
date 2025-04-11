@@ -6,7 +6,8 @@ const Footer = () => {
   const year = new Date().getFullYear();
 
   return (
-    <Box component="footer" 
+    <Box 
+      component="footer" 
       sx={{
         py: 3,
         px: 2,
@@ -23,23 +24,18 @@ const Footer = () => {
           display: 'flex', 
           flexDirection: { xs: 'column', sm: 'row' },
           justifyContent: 'space-between',
-          alignItems: { xs: 'center', sm: 'flex-start' },
-          textAlign: { xs: 'center', sm: 'left' }
+          alignItems: { xs: 'center', sm: 'flex-start' }
         }}>
-          <Box sx={{ mb: { xs: 2, sm: 0 } }}>
+          <Box>
             <Typography variant="h6" gutterBottom>
               PredicaHoy
             </Typography>
             <Typography variant="body2" color="text.secondary">
-              Generador de sermones para la comunidad cristiana.
+              Generador de sermones para la comunidad cristiana
             </Typography>
           </Box>
           
-          <Box sx={{ 
-            display: 'flex', 
-            flexDirection: 'column',
-            alignItems: { xs: 'center', sm: 'flex-end' }
-          }}>
+          <Box sx={{ mt: { xs: 2, sm: 0 } }}>
             <Typography variant="body2" gutterBottom>
               ¿Te gusta nuestra herramienta?
             </Typography>

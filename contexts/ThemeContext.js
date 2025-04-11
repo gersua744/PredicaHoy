@@ -1,130 +1,109 @@
-import React, { createContext, useState, useMemo, useContext, useEffect } from 'react';
+import React, { createContext, useState, useContext, useEffect, useMemo } from 'react';
 import { createTheme } from '@mui/material/styles';
 
-// Configuración de temas con estilos específicos
-const themeOptions = {
+// Definir colores personalizados como en el original
+const themeColors = {
   light: {
-    palette: {
-      mode: 'light',
-      primary: {
-        main: '#3f51b5',
-      },
-      secondary: {
-        main: '#f50057',
-      },
-      background: {
-        default: '#f5f5f5',
-        paper: '#ffffff',
-      },
-    },
-    components: {
-      MuiButton: {
-        styleOverrides: {
-          root: {
-            borderRadius: 4,
-            textTransform: 'none',
-            fontWeight: 500,
-          },
-        },
-      },
-      MuiPaper: {
-        styleOverrides: {
-          root: {
-            borderRadius: 8,
-          },
-        },
-      },
-      MuiAppBar: {
-        styleOverrides: {
-          root: {
-            boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-          },
-        },
-      },
-    },
+    primary: '#3b82f6',    // blue
+    primaryDark: '#2563eb',
+    secondary: '#ec4899',  // pink
+    secondaryDark: '#db2777',
+    text: '#1f2937',
+    background: '#ffffff',
+    card: '#f9fafb',
+    grey: {
+      200: '#e5e7eb',
+      700: '#374151',
+    }
   },
   dark: {
-    palette: {
-      mode: 'dark',
-      primary: {
-        main: '#90caf9',
-      },
-      secondary: {
-        main: '#f48fb1',
-      },
-      background: {
-        default: '#303030',
-        paper: '#424242',
-      },
-    },
-    components: {
-      MuiButton: {
-        styleOverrides: {
-          root: {
-            borderRadius: 4,
-            textTransform: 'none',
-            fontWeight: 500,
-          },
-          outlined: {
-            borderColor: '#90caf9',
-            color: '#90caf9',
-          },
-        },
-      },
-      MuiPaper: {
-        styleOverrides: {
-          root: {
-            borderRadius: 8,
-          },
-        },
-      },
-      MuiAppBar: {
-        styleOverrides: {
-          root: {
-            boxShadow: '0 2px 4px rgba(0,0,0,0.3)',
-          },
-        },
-      },
-    },
-  },
+    primary: '#3b82f6',    // blue
+    secondary: '#ec4899',  // pink
+    text: '#f3f4f6',
+    background: '#111827',
+    card: '#1f2937',
+    grey: {
+      200: '#374151',
+      700: '#4b5563',
+    }
+  }
 };
 
-// Contexto para el tema
-const ThemeContext = createContext({ 
+// Crear el contexto
+const ThemeContext = createContext({
   toggleColorMode: () => {},
   theme: null
 });
 
-// Hook personalizado
+// Hook personalizado para usar el contexto
 export const useThemeContext = () => useContext(ThemeContext);
 
 // Proveedor del contexto
 export const ThemeContextProvider = ({ children }) => {
-  // Verifica si estamos en el navegador
-  const isBrowser = typeof window !== 'undefined';
-  const storedMode = isBrowser ? localStorage.getItem('themeMode') : 'light';
+  // Obtener el tema guardado o usar 'light' por defecto
+  const [mode, setMode] = useState('light');
   
-  // Estado para el modo actual
-  const [mode, setMode] = useState(storedMode || 'light');
-  
-  // Efecto para aplicar clase al body y guardar preferencia
+  // Cargar tema guardado cuando se inicia
   useEffect(() => {
-    if (isBrowser) {
-      localStorage.setItem('themeMode', mode);
-      document.body.classList.toggle('dark-mode', mode === 'dark');
-    }
-  }, [mode, isBrowser]);
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    setMode(savedTheme);
+    // Aplicar clase al body para estilos globales
+    document.body.classList.add(savedTheme);
+  }, []);
   
-  // Función para alternar entre modos
+  // Función para cambiar el tema
   const toggleColorMode = () => {
-    setMode((prevMode) => (prevMode === 'light' ? 'dark' : 'light'));
+    setMode((prevMode) => {
+      const newMode = prevMode === 'light' ? 'dark' : 'light';
+      
+      // Guardar en localStorage
+      localStorage.setItem('theme', newMode);
+      
+      // Actualizar clases en el body
+      document.body.classList.remove('light', 'dark');
+      document.body.classList.add(newMode);
+      
+      return newMode;
+    });
   };
   
-  // Crea el objeto de tema basado en el modo actual
-  const theme = useMemo(
-    () => createTheme(themeOptions[mode]),
-    [mode],
-  );
+  // Crear tema de Material UI basado en el modo
+  const theme = useMemo(() => {
+    return createTheme({
+      palette: {
+        mode,
+        primary: {
+          main: mode === 'light' ? themeColors.light.primary : themeColors.dark.primary,
+        },
+        secondary: {
+          main: mode === 'light' ? themeColors.light.secondary : themeColors.dark.secondary,
+        },
+        background: {
+          default: mode === 'light' ? themeColors.light.background : themeColors.dark.background,
+          paper: mode === 'light' ? themeColors.light.card : themeColors.dark.card,
+        },
+        text: {
+          primary: mode === 'light' ? themeColors.light.text : themeColors.dark.text,
+        },
+      },
+      components: {
+        MuiButton: {
+          styleOverrides: {
+            root: {
+              textTransform: 'none',
+            },
+          },
+        },
+        MuiPaper: {
+          styleOverrides: {
+            root: {
+              borderRadius: 8,
+            },
+          },
+        },
+      },
+    });
+  }, [mode]);
   
   return (
     <ThemeContext.Provider value={{ toggleColorMode, theme }}>

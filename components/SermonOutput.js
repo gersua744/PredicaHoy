@@ -22,11 +22,11 @@ const SermonOutput = ({ sermon, loading }) => {
   
   if (loading) {
     return (
-      <Paper elevation={3} sx={{ p: 3, mb: 4 }}>
+      <Paper elevation={3} sx={{ p: 3, mb: 4, borderRadius: 2 }}>
         <Skeleton variant="text" height={60} />
         <Skeleton variant="text" height={30} />
-        <Skeleton variant="text" height={40} />
-        <Skeleton variant="rectangular" height={200} />
+        <Skeleton variant="text" height={40} sx={{ mb: 2 }} />
+        <Skeleton variant="rectangular" height={200} sx={{ mb: 2 }} />
         <Skeleton variant="text" height={40} />
         <Skeleton variant="rectangular" height={100} />
       </Paper>
@@ -96,10 +96,9 @@ const SermonOutput = ({ sermon, loading }) => {
       elevation={3} 
       className="sermon-output"
       sx={{
-        bgcolor: theme.palette.background.paper,
-        color: theme.palette.text.primary,
         p: 3,
-        mb: 4
+        mb: 4,
+        borderRadius: 2
       }}
     >
       <div ref={sermonRef} dangerouslySetInnerHTML={{ __html: sermon.content }} />
@@ -107,7 +106,7 @@ const SermonOutput = ({ sermon, loading }) => {
       <Box sx={{ 
         display: 'flex', 
         justifyContent: 'flex-end',
-        mt: 2,
+        mt: 3,
         gap: 2
       }}>
         <Button
@@ -151,6 +150,7 @@ const SermonOutput = ({ sermon, loading }) => {
         open={copied}
         autoHideDuration={3000}
         onClose={() => setCopied(false)}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
       >
         <Alert 
           severity="success" 

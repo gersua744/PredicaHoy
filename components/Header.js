@@ -15,6 +15,10 @@ import {
   ListItemIcon
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
+import HomeIcon from '@mui/icons-material/Home';
+import InfoIcon from '@mui/icons-material/Info';
+import HelpIcon from '@mui/icons-material/Help';
+import FeedIcon from '@mui/icons-material/Feed';
 import ThemeToggle from './ThemeToggle';
 import DonationButton from './DonationButton';
 
@@ -29,6 +33,13 @@ const Header = () => {
     }
     setDrawerOpen(open);
   };
+
+  const menuItems = [
+    { text: 'Inicio', icon: <HomeIcon />, href: '/' },
+    { text: 'Acerca de', icon: <InfoIcon />, href: '#about' },
+    { text: 'Recursos', icon: <FeedIcon />, href: '#resources' },
+    { text: 'Ayuda', icon: <HelpIcon />, href: '#help' },
+  ];
 
   return (
     <AppBar position="static" color="primary" elevation={3}>
@@ -61,11 +72,13 @@ const Header = () => {
                 onClick={toggleDrawer(false)}
                 onKeyDown={toggleDrawer(false)}
               >
-                {/* Menú lateral vacío - solo contiene opciones básicas */}
                 <List>
-                  <ListItem button component="a" href="/">
-                    <ListItemText primary="Inicio" />
-                  </ListItem>
+                  {menuItems.map((item) => (
+                    <ListItem button key={item.text} component="a" href={item.href}>
+                      <ListItemIcon>{item.icon}</ListItemIcon>
+                      <ListItemText primary={item.text} />
+                    </ListItem>
+                  ))}
                 </List>
               </Box>
             </Drawer>
@@ -73,6 +86,16 @@ const Header = () => {
         ) : (
           <>
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
+              {menuItems.map((item) => (
+                <Button 
+                  key={item.text} 
+                  color="inherit" 
+                  href={item.href} 
+                  sx={{ mx: 1 }}
+                >
+                  {item.text}
+                </Button>
+              ))}
               <DonationButton />
               <ThemeToggle />
             </Box>

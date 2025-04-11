@@ -70,3 +70,6 @@ function generateSermon(topic, verse, style, length) {
     }
   };
 }
+
+
+        

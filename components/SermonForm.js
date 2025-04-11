@@ -75,11 +75,10 @@ const SermonForm = () => {
       sx={{
         p: 3,
         mb: 4,
-        bgcolor: theme.palette.background.paper,
-        color: theme.palette.text.primary
+        borderRadius: 2
       }}
     >
-      <Typography variant="h5" component="h2" gutterBottom align="center">
+      <Typography variant="h5" component="h2" gutterBottom align="center" sx={{ mb: 3, fontWeight: 500 }}>
         Genera tu sermón
       </Typography>
       
@@ -95,6 +94,7 @@ const SermonForm = () => {
             helperText={formErrors.topic || 'Ej: El amor de Dios, La oración, El perdón'}
             margin="normal"
             required
+            variant="outlined"
           />
         </Grid>
         
@@ -107,11 +107,12 @@ const SermonForm = () => {
             onChange={handleChange}
             helperText="Ej: Juan 3:16, Salmos 23:1, Romanos 8:28"
             margin="normal"
+            variant="outlined"
           />
         </Grid>
         
         <Grid item xs={12} md={6}>
-          <FormControl fullWidth margin="normal">
+          <FormControl fullWidth margin="normal" variant="outlined">
             <InputLabel id="style-label">Estilo del mensaje</InputLabel>
             <Select
               labelId="style-label"
@@ -129,7 +130,7 @@ const SermonForm = () => {
         </Grid>
         
         <Grid item xs={12} md={6}>
-          <FormControl fullWidth margin="normal">
+          <FormControl fullWidth margin="normal" variant="outlined">
             <InputLabel id="length-label">Longitud del sermón</InputLabel>
             <Select
               labelId="length-label"
@@ -146,13 +147,14 @@ const SermonForm = () => {
         </Grid>
       </Grid>
       
-      <Box sx={{ mt: 3, textAlign: 'center' }}>
+      <Box sx={{ mt: 4, textAlign: 'center' }}>
         <Button 
           type="submit" 
           variant="contained" 
           color="primary" 
           size="large"
           startIcon={<CreateIcon />}
+          sx={{ px: 4, py: 1 }}
         >
           Generar Sermón
         </Button>
@@ -163,3 +165,5 @@ const SermonForm = () => {
 
 export default SermonForm;
 
+    
+     

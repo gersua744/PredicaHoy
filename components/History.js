@@ -1,116 +1,79 @@
 import React from 'react';
-import {
-  Paper,
-  Typography,
-  List,
-  ListItem,
-  ListItemText,
-  ListItemSecondaryAction,
-  IconButton,
-  Divider,
-  Box,
-  useTheme,
-  Tooltip
-} from '@mui/material';
-import RestoreIcon from '@mui/icons-material/Restore';
+import { Box, Paper, Typography, List, ListItem, ListItemText, Button, Divider } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useSermonContext } from '../contexts/SermonContext';
 
 const History = () => {
-  // Obtiene el historial de sermones y funciones del contexto
-  const { sermonHistory, restoreSermon, removeFromHistory } = useSermonContext();
-  // Obtiene el tema actual para estilos
-  const theme = useTheme();
-  
-  // Si no hay historial, no renderiza nada
-  if (!sermonHistory || sermonHistory.length === 0) {
-    return null;
-  }
-  
-  // Formato de fecha para mostrar
-  const formatDate = (dateString) => {
-    try {
-      const date = new Date(dateString);
-      return date.toLocaleDateString('es', { 
-        year: 'numeric', 
-        month: 'short', 
-        day: 'numeric' 
-      });
-    } catch (e) {
-      return 'Fecha desconocida';
-    }
-  };
+  const { sermonHistory, restoreSermon, clearHistory } = useSermonContext();
   
   return (
     <Paper 
-      elevation={3}
-      sx={{
-        p: 3,
-        mb: 4,
+      elevation={4} 
+      sx={{ 
+        p: 3, 
         borderRadius: 2
       }}
     >
-      <Typography variant="h5" component="h2" gutterBottom>
-        Historial de sermones
-      </Typography>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
+        <Typography variant="h6" fontWeight="600">
+          Historial
+        </Typography>
+        
+        {sermonHistory && sermonHistory.length > 0 && (
+          <Button
+            variant="text"
+            color="error"
+            size="small"
+            startIcon={<DeleteIcon />}
+            onClick={clearHistory}
+            sx={{ fontSize: 13, textTransform: 'none' }}
+          >
+            Limpiar
+          </Button>
+        )}
+      </Box>
       
-      <Divider sx={{ mb: 2 }} />
-      
-      <List>
-        {sermonHistory.map((sermon, index) => (
-          <React.Fragment key={index}>
-            <ListItem>
-              <ListItemText
-                primary={sermon.title || 'Sermón sin título'}
-                secondary={
-                  <React.Fragment>
-                    <Typography
-                      component="span"
-                      variant="body2"
-                      color="text.primary"
-                    >
-                      {sermon.metadata?.topic || 'Tema no especificado'}
-                    </Typography>
-                    {' — '}
-                    {sermon.metadata?.verse && (
-                      <Typography component="span" variant="body2">
-                        {sermon.metadata.verse} • 
-                      </Typography>
-                    )}
-                    <Typography component="span" variant="body2">
-                      {sermon.metadata?.date ? formatDate(sermon.metadata.date) : ''}
-                    </Typography>
-                  </React.Fragment>
-                }
-              />
-              <ListItemSecondaryAction>
-                <Tooltip title="Restaurar sermón">
-                  <IconButton 
-                    edge="end" 
-                    aria-label="restore"
-                    onClick={() => restoreSermon(sermon)}
-                    sx={{ mr: 1 }}
-                  >
-                    <RestoreIcon />
-                  </IconButton>
-                </Tooltip>
-                <Tooltip title="Eliminar del historial">
-                  <IconButton 
-                    edge="end" 
-                    aria-label="delete"
-                    onClick={() => removeFromHistory(index)}
-                  >
-                    <DeleteIcon />
-                  </IconButton>
-                </Tooltip>
-              </ListItemSecondaryAction>
-            </ListItem>
-            {index < sermonHistory.length - 1 && <Divider variant="inset" component="li" />}
-          </React.Fragment>
-        ))}
-      </List>
+      {sermonHistory && sermonHistory.length > 0 ? (
+        <List sx={{ px: 0 }}>
+          {sermonHistory.map((sermon, index) => (
+            <React.Fragment key={index}>
+              <ListItem 
+                sx={{ 
+                  p: 2, 
+                  mb: 1, 
+                  border: 1, 
+                  borderColor: 'grey.200',
+                  borderRadius: 1,
+                  transition: 'all 0.2s',
+                  cursor: 'pointer',
+                  '&:hover': {
+                    transform: 'translateY(-2px)',
+                    boxShadow: 2
+                  }
+                }}
+                onClick={() => restoreSermon(sermon)}
+              >
+                <ListItemText
+                  primary={sermon.title}
+                  secondary={
+                    <Box component="span" sx={{ display: 'block', fontSize: 12, color: 'text.secondary' }}>
+                      {new Date(sermon.timestamp).toLocaleDateString()} - {sermon.style}, {sermon.length}
+                    </Box>
+                  }
+                />
+              </ListItem>
+              {index < sermonHistory.length - 1 && <Divider />}
+            </React.Fragment>
+          ))}
+        </List>
+      ) : (
+        <Box sx={{ py: 4, textAlign: 'center', color: 'text.secondary' }}>
+          Tu historial de sermones aparecerá aquí
+        </Box>
+      )}
     </Paper>
   );
 };
 
 export default History;
+

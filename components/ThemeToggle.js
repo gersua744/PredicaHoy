@@ -10,7 +10,7 @@ const ThemeToggle = () => {
   
   return (
     <Tooltip title={theme.palette.mode === 'dark' ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'}>
-      <IconButton onClick={toggleColorMode} color="inherit" aria-label="toggle theme">
+      <IconButton onClick={toggleColorMode} color="inherit" aria-label="toggle theme" size="large">
         {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
       </IconButton>
     </Tooltip>

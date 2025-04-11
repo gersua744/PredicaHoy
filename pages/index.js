@@ -1,15 +1,34 @@
 import { useState } from "react";
 
 export default function Home() {
+  // Estados para los campos del formulario
   const [sermon, setSermon] = useState("");
   const [topic, setTopic] = useState("");
   const [verse, setVerse] = useState("");
   const [style, setStyle] = useState("expositivo");
   const [length, setLength] = useState("corto");
 
+  // Función para generar el sermón
   const generateSermon = () => {
-    // Lógica para generar el sermón
-    setSermon(`Sermón basado en el tema: ${topic}, versículo: ${verse}, estilo: ${style}, longitud: ${length}`);
+    const intro = `Hoy vamos a hablar sobre el tema: ${topic}, basado en el versículo ${verse}.`;
+    const body = `Este sermón se centrará en el estilo de sermón ${style}, con una longitud ${length}.`;
+    const conclusion = `Concluimos con la reflexión sobre cómo aplicar este mensaje en nuestra vida diaria.`;
+    
+    setSermon(`${intro} ${body} ${conclusion}`);
+  };
+
+  // Función para copiar al portapapeles
+  const copyToClipboard = () => {
+    navigator.clipboard.writeText(sermon);
+    alert("Sermón copiado al portapapeles");
+  };
+
+  // Función para descargar el sermón como PDF
+  const downloadPDF = () => {
+    const { jsPDF } = require("jspdf");
+    const doc = new jsPDF();
+    doc.text(sermon, 10, 10);
+    doc.save("sermon.pdf");
   };
 
   return (
@@ -57,6 +76,8 @@ export default function Home() {
         <div>
           <h2>Sermón Generado:</h2>
           <p>{sermon}</p>
+          <button onClick={copyToClipboard}>Copiar al portapapeles</button>
+          <button onClick={downloadPDF}>Descargar PDF</button>
         </div>
       )}
     </div>

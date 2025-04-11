@@ -1,10 +1,15 @@
+/* Reset básico */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
 html,
 body {
-  padding: 0;
-  margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
-  background-color: #f5f5f5;
+  min-height: 100vh;
 }
 
 a {
@@ -12,11 +17,7 @@ a {
   text-decoration: none;
 }
 
-* {
-  box-sizing: border-box;
-}
-
-/* Estilos para sermones */
+/* Estilos específicos para sermones */
 .sermon-content h1 {
   margin-bottom: 8px;
   text-align: center;
@@ -40,12 +41,7 @@ a {
   line-height: 1.6;
 }
 
-/* Estilos para modo oscuro */
-body.dark-mode {
-  background-color: #303030;
-  color: #fff;
-}
-
+/* Modo oscuro */
 body.dark-mode .sermon-content .verse {
   color: #aaa;
 }
@@ -53,3 +49,18 @@ body.dark-mode .sermon-content .verse {
 body.dark-mode .sermon-content h2 {
   color: #90caf9;
 }
+
+/* Estilos para cards de donación */
+.donation-method-card {
+  transition: all 0.3s ease;
+}
+
+.donation-method-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+.donation-method-card.active {
+  border: 2px solid #3f51b5;
+}
+

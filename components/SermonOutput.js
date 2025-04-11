@@ -10,7 +10,6 @@ import {
   useTheme
 } from '@mui/material';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
-import PrintIcon from '@mui/icons-material/Print';
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import html2canvas from 'html2canvas';
 import { jsPDF } from 'jspdf';
@@ -22,13 +21,14 @@ const SermonOutput = ({ sermon, loading }) => {
   
   if (loading) {
     return (
-      <Paper elevation={3} sx={{ p: 3, mb: 4, borderRadius: 2 }}>
-        <Skeleton variant="text" height={60} />
-        <Skeleton variant="text" height={30} />
-        <Skeleton variant="text" height={40} sx={{ mb: 2 }} />
-        <Skeleton variant="rectangular" height={200} sx={{ mb: 2 }} />
+      <Paper elevation={3} sx={{ p: 3 }}>
+        <Typography variant="h6" gutterBottom>
+          Tu Sermón
+        </Typography>
         <Skeleton variant="text" height={40} />
-        <Skeleton variant="rectangular" height={100} />
+        <Skeleton variant="text" height={20} />
+        <Skeleton variant="rectangular" height={200} sx={{ my: 2 }} />
+        <Skeleton variant="text" height={40} />
       </Paper>
     );
   }
@@ -36,7 +36,6 @@ const SermonOutput = ({ sermon, loading }) => {
   if (!sermon) return null;
   
   const handleCopyClick = () => {
-    // Extraer solo el texto del sermón sin etiquetas HTML
     const tempElement = document.createElement('div');
     tempElement.innerHTML = sermon.content;
     const textContent = tempElement.textContent || tempElement.innerText;
@@ -44,31 +43,6 @@ const SermonOutput = ({ sermon, loading }) => {
     navigator.clipboard.writeText(textContent).then(() => {
       setCopied(true);
     });
-  };
-  
-  const handlePrint = () => {
-    const printWindow = window.open('', '_blank');
-    printWindow.document.write(`
-      <html>
-        <head>
-          <title>${sermon.title || 'Sermón generado'}</title>
-          <style>
-            body { font-family: Arial, sans-serif; line-height: 1.6; padding: 20px; }
-            h1 { text-align: center; margin-bottom: 8px; }
-            .verse { text-align: center; font-style: italic; margin-bottom: 24px; }
-            h2 { margin-top: 24px; color: #333; }
-            p { margin-bottom: 16px; }
-          </style>
-        </head>
-        <body>
-          ${sermon.content}
-        </body>
-      </html>
-    `);
-    printWindow.document.close();
-    printWindow.focus();
-    printWindow.print();
-    printWindow.close();
   };
   
   const handleDownloadPDF = async () => {
@@ -93,14 +67,13 @@ const SermonOutput = ({ sermon, loading }) => {
   
   return (
     <Paper 
-      elevation={3} 
-      className="sermon-output"
-      sx={{
-        p: 3,
-        mb: 4,
-        borderRadius: 2
-      }}
+      elevation={3}
+      sx={{ p: 3 }}
     >
+      <Typography variant="h6" gutterBottom>
+        Tu Sermón
+      </Typography>
+      
       <div ref={sermonRef} dangerouslySetInnerHTML={{ __html: sermon.content }} />
       
       <Box sx={{ 
@@ -113,36 +86,16 @@ const SermonOutput = ({ sermon, loading }) => {
           variant="outlined"
           startIcon={<ContentCopyIcon />}
           onClick={handleCopyClick}
-          sx={{
-            borderColor: theme.palette.mode === 'dark' ? theme.palette.primary.main : undefined,
-            color: theme.palette.mode === 'dark' ? theme.palette.primary.main : undefined
-          }}
         >
           Copiar
         </Button>
         
         <Button
           variant="outlined"
-          startIcon={<PrintIcon />}
-          onClick={handlePrint}
-          sx={{
-            borderColor: theme.palette.mode === 'dark' ? theme.palette.primary.main : undefined,
-            color: theme.palette.mode === 'dark' ? theme.palette.primary.main : undefined
-          }}
-        >
-          Imprimir
-        </Button>
-        
-        <Button
-          variant="outlined"
           startIcon={<PictureAsPdfIcon />}
           onClick={handleDownloadPDF}
-          sx={{
-            borderColor: theme.palette.mode === 'dark' ? theme.palette.primary.main : undefined,
-            color: theme.palette.mode === 'dark' ? theme.palette.primary.main : undefined
-          }}
         >
-          Descargar PDF
+          PDF
         </Button>
       </Box>
       
@@ -150,15 +103,10 @@ const SermonOutput = ({ sermon, loading }) => {
         open={copied}
         autoHideDuration={3000}
         onClose={() => setCopied(false)}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
       >
         <Alert 
           severity="success" 
-          sx={{ 
-            width: '100%',
-            bgcolor: theme.palette.mode === 'dark' ? theme.palette.success.dark : theme.palette.success.light,
-            color: theme.palette.mode === 'dark' ? 'white' : 'inherit'
-          }}
+          sx={{ width: '100%' }}
         >
           ¡Sermón copiado al portapapeles!
         </Alert>

@@ -4,9 +4,6 @@ import Header from './Header';
 import Footer from './Footer';
 
 const Layout = ({ children }) => {
-  // Movemos la obtención del contexto aquí
-  const { toggleColorMode } = useThemeContext();
-  
   return (
     <Box 
       sx={{ 
@@ -15,7 +12,7 @@ const Layout = ({ children }) => {
         minHeight: '100vh'
       }}
     >
-      <Header toggleColorMode={toggleColorMode} />
+      <Header />
       <Box 
         component="main" 
         sx={{ 

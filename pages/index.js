@@ -8,10 +8,10 @@ import History from '../components/History';
 export default function Home() {
   return (
     <Layout>
-      <Container maxWidth="lg" sx={{ py: 8, px: { xs: 2, md: 4 } }}>
+      <Container maxWidth="lg" sx={{ py: 6, px: { xs: 2, md: 4 } }}>
         {/* Sección de bienvenida */}
-        <Box sx={{ textAlign: 'center', mb: 12 }}>
-          <Typography variant="h3" component="h1" fontWeight="bold" gutterBottom>
+        <Box sx={{ textAlign: 'center', mb: 8 }}>
+          <Typography variant="h3" component="h1" fontWeight="bold" gutterBottom color="text.primary">
             Generador de Sermones Cristianos
           </Typography>
           <Typography variant="body1" color="text.secondary" sx={{ maxWidth: 800, mx: 'auto' }}>
@@ -22,7 +22,7 @@ export default function Home() {
         </Box>
 
         {/* Contenido principal - 2 columnas */}
-        <Grid container spacing={8}>
+        <Grid container spacing={4}>
           {/* Columna izquierda - Formulario y historial */}
           <Grid item xs={12} md={5}>
             <SermonForm />
@@ -38,4 +38,3 @@ export default function Home() {
     </Layout>
   );
 }
-

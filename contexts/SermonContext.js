@@ -1,5 +1,6 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import { getFromStorage, saveToStorage } from '../utils/storage';
+const React = require('react');
+const { createContext, useContext, useState, useEffect } = React;
+const storage = require('../utils/storage');
 
 // Crear contexto con valores por defecto
 const SermonContext = createContext({
@@ -12,18 +13,18 @@ const SermonContext = createContext({
 });
 
 // Proveedor del contexto
-export const SermonContextProvider = ({ children }) => {
+function SermonContextProvider({ children }) {
   const [currentSermon, setCurrentSermon] = useState(null);
   const [sermonHistory, setSermonHistory] = useState([]);
   const [loadingSermon, setLoadingSermon] = useState(false);
   
   // Cargar historial de sermones del localStorage al montar
   useEffect(() => {
-    const storedHistory = getFromStorage('sermonHistory', []);
+    const storedHistory = storage.getFromStorage('sermonHistory', []);
     setSermonHistory(storedHistory);
     
     // También podríamos cargar el último sermón
-    const lastSermon = getFromStorage('currentSermon', null);
+    const lastSermon = storage.getFromStorage('currentSermon', null);
     if (lastSermon) {
       setCurrentSermon(lastSermon);
     }
@@ -53,12 +54,12 @@ export const SermonContextProvider = ({ children }) => {
       setCurrentSermon(data.sermon);
       
       // Guardar en localStorage
-      saveToStorage('currentSermon', data.sermon);
+      storage.saveToStorage('currentSermon', data.sermon);
       
       // Añadir al historial
       const updatedHistory = [data.sermon, ...sermonHistory].slice(0, 10); // Limitar a 10
       setSermonHistory(updatedHistory);
-      saveToStorage('sermonHistory', updatedHistory);
+      storage.saveToStorage('sermonHistory', updatedHistory);
       
     } catch (error) {
       console.error('Error al generar sermón:', error);
@@ -71,13 +72,13 @@ export const SermonContextProvider = ({ children }) => {
   // Función para restaurar un sermón del historial
   const restoreSermon = (sermon) => {
     setCurrentSermon(sermon);
-    saveToStorage('currentSermon', sermon);
+    storage.saveToStorage('currentSermon', sermon);
   };
   
   // Función para limpiar el historial
   const clearHistory = () => {
     setSermonHistory([]);
-    saveToStorage('sermonHistory', []);
+    storage.saveToStorage('sermonHistory', []);
   };
   
   // Valores a proporcionar a los consumidores
@@ -95,10 +96,10 @@ export const SermonContextProvider = ({ children }) => {
       {children}
     </SermonContext.Provider>
   );
-};
+}
 
 // Hook personalizado para usar el contexto que maneja el SSR
-export const useSermonContext = () => {
+function useSermonContext() {
   // Solo usamos useContext en el cliente
   if (typeof window === 'undefined') {
     // Valores por defecto para SSR
@@ -114,4 +115,10 @@ export const useSermonContext = () => {
   
   // En el cliente, usamos normalmente useContext
   return useContext(SermonContext);
+}
+
+module.exports = {
+  SermonContext,
+  SermonContextProvider,
+  useSermonContext
 };

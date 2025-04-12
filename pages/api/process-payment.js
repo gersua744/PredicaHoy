@@ -1,4 +1,4 @@
-export default function handler(req, res) {
+module.exports = function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ message: 'Method not allowed' });
   }
@@ -30,4 +30,4 @@ export default function handler(req, res) {
       message: 'Error al procesar el pago. Por favor, intenta de nuevo.'
     });
   }
-}
+};

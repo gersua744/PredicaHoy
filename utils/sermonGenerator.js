@@ -1,7 +1,9 @@
+"use strict";
+
 // Esta función simula la generación de un sermón
 // En una implementación real, aquí conectarías con una API de IA como OpenAI
 
-export const generateSermon = (params) => {
+function generateSermon(params) {
   const { topic, verse, style, length } = params;
   
   // Capitalizar primera letra
@@ -205,4 +207,6 @@ export const generateSermon = (params) => {
     application,
     timestamp: Date.now()
   };
-};
+}
+
+module.exports = { generateSermon };

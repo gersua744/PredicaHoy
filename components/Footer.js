@@ -18,14 +18,14 @@ const Footer = () => {
       <Box 
         component="footer" 
         sx={{ 
-          py: 8,
-          px: { xs: 2, md: 6 },
-          mt: 12,
-          bgcolor: theme.palette.mode === 'light' ? 'grey.100' : 'grey.800'
+          py: 5,
+          px: { xs: 2, md: 0 },
+          mt: 8,
+          bgcolor: theme.palette.mode === 'light' ? '#f1f3f4' : 'grey.900'
         }}
       >
         <Container maxWidth="lg">
-          <Grid container spacing={4} alignItems="center" justifyContent="space-between">
+          <Grid container spacing={2} alignItems="center" justifyContent="space-between">
             <Grid item xs={12} md={6} sx={{ textAlign: { xs: 'center', md: 'left' } }}>
               <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: { xs: 'center', md: 'flex-start' } }}>
                 <BookIcon sx={{ fontSize: 24, color: 'primary.main', mr: 1 }} />
@@ -33,19 +33,19 @@ const Footer = () => {
                   PredicaHoy
                 </Typography>
               </Box>
-              <Typography variant="body2" color="text.secondary" sx={{ mt: 2 }}>
+              <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
                 Herramienta para la generación de sermones cristianos
               </Typography>
             </Grid>
             
             <Grid item xs={12} md={6} sx={{ textAlign: { xs: 'center', md: 'right' } }}>
-              <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+              <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
                 ¿Te ha resultado útil esta herramienta?
               </Typography>
               <Button 
                 variant="contained" 
                 color="secondary" 
-                size="small"
+                size="medium"
                 startIcon={<FavoriteIcon />}
                 onClick={handleDonateClick}
                 sx={{ 
@@ -65,11 +65,11 @@ const Footer = () => {
             </Grid>
           </Grid>
           
-          <Divider sx={{ my: 6, borderColor: theme.palette.mode === 'light' ? 'grey.200' : 'grey.700' }} />
-          
-          <Typography variant="body2" color="text.secondary" align="center">
-            &copy; {year} PredicaHoy. Todos los derechos reservados.
-          </Typography>
+          <Box sx={{ textAlign: 'center', mt: 4 }}>
+            <Typography variant="body2" color="text.secondary">
+              &copy; {year} PredicaHoy. Todos los derechos reservados.
+            </Typography>
+          </Box>
         </Container>
       </Box>
 

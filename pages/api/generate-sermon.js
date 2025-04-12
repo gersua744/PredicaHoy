@@ -1,6 +1,6 @@
-import { generateSermon } from '../../utils/sermonGenerator';
+const { generateSermon } = require('../../utils/sermonGenerator');
 
-export default function handler(req, res) {
+module.exports = function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ message: 'Method not allowed' });
   }
@@ -22,4 +22,4 @@ export default function handler(req, res) {
     console.error('Error generating sermon:', error);
     res.status(500).json({ message: 'Error generating sermon' });
   }
-}
+};

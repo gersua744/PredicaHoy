@@ -1,8 +1,15 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { getFromStorage, saveToStorage } from '../utils/storage';
 
-// Crear contexto
-const SermonContext = createContext(null);
+// Crear contexto con valores por defecto
+const SermonContext = createContext({
+  currentSermon: null,
+  sermonHistory: [],
+  loadingSermon: false,
+  generateSermon: () => {},
+  restoreSermon: () => {},
+  clearHistory: () => {}
+});
 
 // Proveedor del contexto
 export const SermonContextProvider = ({ children }) => {
@@ -90,11 +97,21 @@ export const SermonContextProvider = ({ children }) => {
   );
 };
 
-// Hook personalizado para usar el contexto
+// Hook personalizado para usar el contexto que maneja el SSR
 export const useSermonContext = () => {
-  const context = useContext(SermonContext);
-  if (context === null) {
-    throw new Error('useSermonContext debe ser usado dentro de SermonContextProvider');
+  // Solo usamos useContext en el cliente
+  if (typeof window === 'undefined') {
+    // Valores por defecto para SSR
+    return {
+      currentSermon: null,
+      sermonHistory: [],
+      loadingSermon: false,
+      generateSermon: () => {},
+      restoreSermon: () => {},
+      clearHistory: () => {}
+    };
   }
-  return context;
+  
+  // En el cliente, usamos normalmente useContext
+  return useContext(SermonContext);
 };

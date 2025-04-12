@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { 
   Box, 
   AppBar, 
@@ -14,12 +14,11 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 import DonationModal from './DonationModal';
+import { ColorModeContext } from '../pages/_app';
 
-// No importamos useThemeContext aquí para evitar el error
-// import { useThemeContext } from '../contexts/ThemeContext';
-
-const Header = ({ toggleColorMode }) => { // Recibimos toggleColorMode como prop
+const Header = () => {
   const theme = useTheme();
+  const colorMode = useContext(ColorModeContext);
   const [donationModalOpen, setDonationModalOpen] = useState(false);
 
   const handleDonateClick = () => {
@@ -62,9 +61,9 @@ const Header = ({ toggleColorMode }) => { // Recibimos toggleColorMode como prop
                   textTransform: 'none',
                   px: 3,
                   py: 1,
-                  bgcolor: '#ec4899', // Color rosa como en el demo
+                  bgcolor: '#ec4899',
                   '&:hover': {
-                    bgcolor: '#db2777', // Color rosa más oscuro al hover
+                    bgcolor: '#db2777',
                   },
                   fontWeight: 500,
                   boxShadow: '0 4px 6px -1px rgba(236, 72, 153, 0.3)'
@@ -74,7 +73,7 @@ const Header = ({ toggleColorMode }) => { // Recibimos toggleColorMode como prop
               </Button>
               
               <IconButton 
-                onClick={toggleColorMode}
+                onClick={colorMode.toggleColorMode}
                 sx={{ 
                   p: 1.5, 
                   bgcolor: theme.palette.mode === 'light' ? 'grey.200' : 'grey.700',

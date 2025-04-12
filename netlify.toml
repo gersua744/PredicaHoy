@@ -7,8 +7,4 @@
 
 [build.environment]
   NEXT_USE_NETLIFY_EDGE = "true"
-  NODE_VERSION = "16"
-
-[functions]
-  included_files = ["node_modules/@netlify/plugin-nextjs/plugin/build"]
-
+  NODE_VERSION = "18"

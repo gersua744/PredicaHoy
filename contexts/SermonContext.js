@@ -2,7 +2,7 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import { getFromStorage, saveToStorage } from '../utils/storage';
 
 // Crear contexto
-const SermonContext = createContext();
+const SermonContext = createContext(null);
 
 // Proveedor del contexto
 export const SermonContextProvider = ({ children }) => {
@@ -93,7 +93,7 @@ export const SermonContextProvider = ({ children }) => {
 // Hook personalizado para usar el contexto
 export const useSermonContext = () => {
   const context = useContext(SermonContext);
-  if (!context) {
+  if (context === null) {
     throw new Error('useSermonContext debe ser usado dentro de SermonContextProvider');
   }
   return context;

@@ -2,7 +2,7 @@ import React, { createContext, useContext, useState, useEffect, useMemo } from '
 import { createTheme } from '@mui/material/styles';
 
 // Crear contexto
-const ThemeContext = createContext();
+const ThemeContext = createContext(null); // Inicializar con null
 
 // Definición de los temas claro y oscuro
 const lightTheme = createTheme({
@@ -127,19 +127,21 @@ const darkTheme = createTheme({
 
 // Proveedor del contexto
 export const ThemeContextProvider = ({ children }) => {
-  // Verificar si es el modo oscuro del sistema
-  const prefersDarkMode = 
-    typeof window !== 'undefined' ? 
-    window.matchMedia('(prefers-color-scheme: dark)').matches : 
-    false;
+  // Verificar preferencias del sistema solo en el cliente
+  const prefersDarkMode = typeof window !== 'undefined' 
+    ? window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches 
+    : false;
   
   // Obtener el modo del tema del localStorage o usar el predeterminado
-  const storedThemeMode = 
-    typeof window !== 'undefined' ? 
-    localStorage.getItem('themeMode') : 
-    null;
+  const getInitialMode = () => {
+    if (typeof window !== 'undefined') {
+      const storedMode = localStorage.getItem('themeMode');
+      return storedMode ? storedMode : prefersDarkMode ? 'dark' : 'light';
+    }
+    return 'light'; // Valor por defecto en SSR
+  };
   
-  const [mode, setMode] = useState(storedThemeMode || (prefersDarkMode ? 'dark' : 'light'));
+  const [mode, setMode] = useState(getInitialMode);
   
   // Crear el tema basado en el modo actual
   const theme = useMemo(
@@ -159,22 +161,32 @@ export const ThemeContextProvider = ({ children }) => {
     });
   };
   
-  // Sincronizar el tema con las preferencias del sistema
+  // Sincronizar el tema con las preferencias del sistema (solo en el cliente)
   useEffect(() => {
-    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-    
-    const handleChange = (e) => {
-      // Solo cambiar automáticamente si el usuario no ha establecido una preferencia
-      if (!localStorage.getItem('themeMode')) {
-        setMode(e.matches ? 'dark' : 'light');
+    if (typeof window !== 'undefined' && window.matchMedia) {
+      const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+      
+      const handleChange = (e) => {
+        // Solo cambiar automáticamente si el usuario no ha establecido una preferencia
+        if (!localStorage.getItem('themeMode')) {
+          setMode(e.matches ? 'dark' : 'light');
+        }
+      };
+      
+      if (mediaQuery.addEventListener) {
+        mediaQuery.addEventListener('change', handleChange);
+        return () => {
+          mediaQuery.removeEventListener('change', handleChange);
+        };
+      } else if (mediaQuery.addListener) {
+        // Para compatibilidad con navegadores más antiguos
+        mediaQuery.addListener(handleChange);
+        return () => {
+          mediaQuery.removeListener(handleChange);
+        };
       }
-    };
-    
-    mediaQuery.addEventListener('change', handleChange);
-    
-    return () => {
-      mediaQuery.removeEventListener('change', handleChange);
-    };
+    }
+    return undefined;
   }, []);
   
   // Valores a proporcionar a los consumidores
@@ -194,7 +206,7 @@ export const ThemeContextProvider = ({ children }) => {
 // Hook personalizado para usar el contexto
 export const useThemeContext = () => {
   const context = useContext(ThemeContext);
-  if (!context) {
+  if (context === null) {
     throw new Error('useThemeContext debe ser usado dentro de ThemeContextProvider');
   }
   return context;

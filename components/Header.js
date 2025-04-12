@@ -13,12 +13,13 @@ import BookIcon from '@mui/icons-material/Book';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
-import { useThemeContext } from '../contexts/ThemeContext';
 import DonationModal from './DonationModal';
 
-const Header = () => {
+// No importamos useThemeContext aquí para evitar el error
+// import { useThemeContext } from '../contexts/ThemeContext';
+
+const Header = ({ toggleColorMode }) => { // Recibimos toggleColorMode como prop
   const theme = useTheme();
-  const { toggleColorMode } = useThemeContext();
   const [donationModalOpen, setDonationModalOpen] = useState(false);
 
   const handleDonateClick = () => {

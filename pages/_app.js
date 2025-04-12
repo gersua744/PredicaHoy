@@ -1,25 +1,118 @@
-import React from 'react';
-import Head from 'next/head';
-import { CacheProvider } from '@emotion/react';
-import { ThemeProvider, CssBaseline, createTheme } from '@mui/material';
-import { SermonContextProvider } from '../contexts/SermonContext';
-import createEmotionCache from '../utils/createEmotionCache';
-import '../styles/globals.css';
+const React = require('react');
+const Head = require('next/head').default;
+const { CacheProvider } = require('@emotion/react');
+const { ThemeProvider, CssBaseline, createTheme } = require('@mui/material');
+const { SermonContextProvider } = require('../contexts/SermonContext');
+const createEmotionCache = require('../utils/createEmotionCache');
+require('../styles/globals.css');
 
 // Cliente-side cache compartido para toda la sesión
 const clientSideEmotionCache = createEmotionCache();
 
 // Crea un contexto para el tema directamente en _app.js
-export const ColorModeContext = React.createContext({ 
+const ColorModeContext = React.createContext({ 
   toggleColorMode: () => {} 
 });
 
-// Temas definidos aquí...
+// Tema claro (basado en el demo)
+const lightTheme = createTheme({
+  palette: {
+    mode: 'light',
+    primary: {
+      main: '#4285f4', // Azul como en el demo
+      light: '#60a5fa',
+      dark: '#2563eb',
+      contrastText: '#ffffff',
+    },
+    secondary: {
+      main: '#ec4899', // Rosa como en el botón de donar
+      light: '#f472b6',
+      dark: '#db2777',
+      contrastText: '#ffffff',
+    },
+    background: {
+      default: '#f8f9fa', // Fondo gris claro como en el demo
+      paper: '#ffffff',
+    },
+    text: {
+      primary: '#202124', // Color de texto oscuro
+      secondary: '#5f6368', // Color de texto gris
+    },
+  },
+  // Resto de configuración del tema...
+});
 
-export default function MyApp(props) {
+// Tema oscuro (basado en el mismo estilo)
+const darkTheme = createTheme({
+  palette: {
+    mode: 'dark',
+    primary: {
+      main: '#4285f4', // Azul
+      light: '#60a5fa',
+      dark: '#2563eb',
+      contrastText: '#ffffff',
+    },
+    secondary: {
+      main: '#ec4899', // Rosa
+      light: '#f472b6',
+      dark: '#db2777',
+      contrastText: '#ffffff',
+    },
+    background: {
+      default: '#202124', // Fondo oscuro como en modo oscuro de Google
+      paper: '#303134',
+    },
+    text: {
+      primary: '#ffffff',
+      secondary: '#bdc1c6',
+    },
+  },
+  // Resto de configuración del tema...
+});
+
+function MyApp(props) {
   const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
   
-  // Estado y efectos aquí...
+  // Estado para controlar el modo (tema claro/oscuro)
+  const [mode, setMode] = React.useState('light'); // Comenzar con tema claro como en el demo
+  
+  // Determina el tema inicial basado en localStorage y preferencias del sistema
+  React.useEffect(() => {
+    if (typeof window !== 'undefined') {
+      // Obtener el modo del tema del localStorage
+      const storedThemeMode = localStorage.getItem('themeMode');
+      
+      if (storedThemeMode) {
+        setMode(storedThemeMode);
+      } else {
+        // Si no hay tema guardado, usar el tema claro por defecto (como en el demo)
+        setMode('light');
+      }
+    }
+  }, []);
+  
+  // Función para alternar entre temas - IMPORTANTE: Esto debe estar en el contexto del componente
+  const colorMode = React.useMemo(
+    () => ({
+      toggleColorMode: () => {
+        setMode((prevMode) => {
+          const newMode = prevMode === 'light' ? 'dark' : 'light';
+          // Guardar en localStorage
+          if (typeof window !== 'undefined') {
+            localStorage.setItem('themeMode', newMode);
+          }
+          return newMode;
+        });
+      },
+    }),
+    []
+  );
+  
+  // Seleccionar tema basado en el modo
+  const theme = React.useMemo(
+    () => (mode === 'light' ? lightTheme : darkTheme),
+    [mode]
+  );
 
   return (
     <CacheProvider value={emotionCache}>
@@ -44,3 +137,7 @@ export default function MyApp(props) {
     </CacheProvider>
   );
 }
+
+// Exporta el contexto para que pueda ser importado por otros componentes
+module.exports = MyApp;
+module.exports.ColorModeContext = ColorModeContext;

@@ -1,5 +1,9 @@
-import createCache from '@emotion/cache';
+"use strict";
 
-export default function createEmotionCache() {
+const createCache = require('@emotion/cache').default;
+
+function createEmotionCache() {
   return createCache({ key: 'css', prepend: true });
 }
+
+module.exports = createEmotionCache;

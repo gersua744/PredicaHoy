@@ -1,5 +1,6 @@
-import React, { useState, useContext } from 'react';
-import { 
+const React = require('react');
+const { useState, useContext } = React;
+const { 
   Box, 
   AppBar, 
   Toolbar, 
@@ -8,18 +9,18 @@ import {
   IconButton,
   Container,
   useTheme
-} from '@mui/material';
-import BookIcon from '@mui/icons-material/Book';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import LightModeIcon from '@mui/icons-material/LightMode';
-import DarkModeIcon from '@mui/icons-material/DarkMode';
-import { ColorModeContext } from '../pages/_app';
-import DonationModal from './DonationModal';
+} = require('@mui/material');
+const BookIcon = require('@mui/icons-material/Book').default;
+const FavoriteIcon = require('@mui/icons-material/Favorite').default;
+const LightModeIcon = require('@mui/icons-material/LightMode').default;
+const DarkModeIcon = require('@mui/icons-material/DarkMode').default;
+const { ColorModeContext } = require('../pages/_app');
+const DonationModal = require('./DonationModal');
 
 const Header = () => {
   const theme = useTheme();
   const colorMode = useContext(ColorModeContext);
-  const [donationModalOpen, setDonationModalOpen] = useState(false);
+  const [donationModalOpen, useState(false);
 
   const handleDonateClick = () => {
     setDonationModalOpen(true);
@@ -73,7 +74,7 @@ const Header = () => {
               </Button>
               
               <IconButton 
-                onClick={colorMode.toggleColorMode}
+                onClick={colorMode?.toggleColorMode} // Usar el operador ? para evitar errores
                 sx={{ 
                   p: 1, 
                   ml: 1,
@@ -101,4 +102,4 @@ const Header = () => {
   );
 };
 
-export default Header;
+module.exports = Header;

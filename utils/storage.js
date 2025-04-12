@@ -1,7 +1,9 @@
-// Funciones para manejar localStorage con manejo de errores y compatibilidad con SSR
+"use strict";
+
+// Funciones para manejar localStorage con manejo de errores
 
 // Guardar datos en localStorage
-export const saveToStorage = (key, data) => {
+function saveToStorage(key, data) {
   try {
     if (typeof window !== 'undefined') {
       localStorage.setItem(key, JSON.stringify(data));
@@ -12,10 +14,10 @@ export const saveToStorage = (key, data) => {
     return false;
   }
   return false;
-};
+}
 
 // Obtener datos de localStorage
-export const getFromStorage = (key, defaultValue = null) => {
+function getFromStorage(key, defaultValue = null) {
   try {
     if (typeof window !== 'undefined') {
       const item = localStorage.getItem(key);
@@ -27,10 +29,10 @@ export const getFromStorage = (key, defaultValue = null) => {
     console.error(`Error getting from localStorage (${key}):`, error);
   }
   return defaultValue;
-};
+}
 
 // Eliminar datos de localStorage
-export const removeFromStorage = (key) => {
+function removeFromStorage(key) {
   try {
     if (typeof window !== 'undefined') {
       localStorage.removeItem(key);
@@ -41,4 +43,10 @@ export const removeFromStorage = (key) => {
     return false;
   }
   return false;
+}
+
+module.exports = {
+  saveToStorage,
+  getFromStorage,
+  removeFromStorage
 };

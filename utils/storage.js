@@ -1,4 +1,4 @@
-// Funciones para manejar localStorage con manejo de errores
+// Funciones para manejar localStorage con manejo de errores y compatibilidad con SSR
 
 // Guardar datos en localStorage
 export const saveToStorage = (key, data) => {

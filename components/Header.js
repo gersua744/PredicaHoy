@@ -11,10 +11,10 @@ import {
 } from '@mui/material';
 import BookIcon from '@mui/icons-material/Book';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import Brightness4Icon from '@mui/icons-material/Brightness4';
-import Brightness7Icon from '@mui/icons-material/Brightness7';
-import DonationModal from './DonationModal';
+import LightModeIcon from '@mui/icons-material/LightMode';
+import DarkModeIcon from '@mui/icons-material/DarkMode';
 import { ColorModeContext } from '../pages/_app';
+import DonationModal from './DonationModal';
 
 const Header = () => {
   const theme = useTheme();
@@ -29,19 +29,19 @@ const Header = () => {
     <>
       <AppBar 
         position="static" 
-        elevation={3}
+        elevation={1}
         sx={{ 
-          py: 2,
-          bgcolor: theme.palette.mode === 'light' ? 'white' : 'grey.800',
-          color: theme.palette.mode === 'light' ? 'grey.800' : 'white'
+          py: 1,
+          bgcolor: theme.palette.background.paper,
+          color: theme.palette.text.primary
         }}
       >
         <Container maxWidth="lg">
-          <Toolbar disableGutters>
+          <Toolbar disableGutters sx={{ minHeight: 64 }}>
             {/* Logo */}
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
               <BookIcon sx={{ fontSize: 32, color: 'primary.main', mr: 1 }} />
-              <Typography variant="h5" component="h1" fontWeight="bold">
+              <Typography variant="h6" component="h1" fontWeight="bold">
                 PredicaHoy
               </Typography>
             </Box>
@@ -49,7 +49,7 @@ const Header = () => {
             <Box sx={{ flexGrow: 1 }} />
             
             {/* Botones de acción */}
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
               <Button 
                 variant="contained" 
                 color="secondary" 
@@ -61,12 +61,12 @@ const Header = () => {
                   textTransform: 'none',
                   px: 3,
                   py: 1,
-                  bgcolor: '#ec4899', 
+                  bgcolor: '#ec4899',
                   '&:hover': {
                     bgcolor: '#db2777',
                   },
                   fontWeight: 500,
-                  boxShadow: '0 4px 6px -1px rgba(236, 72, 153, 0.3)'
+                  boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
                 }}
               >
                 Donar
@@ -75,14 +75,16 @@ const Header = () => {
               <IconButton 
                 onClick={colorMode.toggleColorMode}
                 sx={{ 
-                  p: 1.5, 
-                  bgcolor: theme.palette.mode === 'light' ? 'grey.200' : 'grey.700',
+                  p: 1, 
+                  ml: 1,
+                  bgcolor: theme.palette.mode === 'light' ? 'grey.100' : 'grey.800',
+                  color: theme.palette.mode === 'light' ? 'grey.700' : 'grey.300',
                   borderRadius: '50%'
                 }}
               >
                 {theme.palette.mode === 'light' ? 
-                  <Brightness4Icon /> : 
-                  <Brightness7Icon sx={{ color: 'yellow.500' }} />
+                  <DarkModeIcon /> : 
+                  <LightModeIcon />
                 }
               </IconButton>
             </Box>

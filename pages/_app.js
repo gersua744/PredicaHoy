@@ -6,7 +6,6 @@ import { SermonContextProvider } from '../contexts/SermonContext';
 import createEmotionCache from '../utils/createEmotionCache';
 import '../styles/globals.css';
 
-
 // Cliente-side cache compartido para toda la sesión
 const clientSideEmotionCache = createEmotionCache();
 

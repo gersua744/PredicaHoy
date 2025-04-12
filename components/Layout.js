@@ -2,8 +2,12 @@ import React from 'react';
 import { Box } from '@mui/material';
 import Header from './Header';
 import Footer from './Footer';
+import { useThemeContext } from '../contexts/ThemeContext';
 
 const Layout = ({ children }) => {
+  // Movemos la obtención del contexto aquí
+  const { toggleColorMode } = useThemeContext();
+  
   return (
     <Box 
       sx={{ 
@@ -12,7 +16,7 @@ const Layout = ({ children }) => {
         minHeight: '100vh'
       }}
     >
-      <Header />
+      <Header toggleColorMode={toggleColorMode} />
       <Box 
         component="main" 
         sx={{ 

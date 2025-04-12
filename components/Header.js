@@ -61,7 +61,7 @@ const Header = () => {
                   textTransform: 'none',
                   px: 3,
                   py: 1,
-                  bgcolor: '#ec4899',
+                  bgcolor: '#ec4899', 
                   '&:hover': {
                     bgcolor: '#db2777',
                   },

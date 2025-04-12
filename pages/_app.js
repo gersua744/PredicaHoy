@@ -14,27 +14,141 @@ export const ColorModeContext = React.createContext({
   toggleColorMode: () => {} 
 });
 
+// Tema claro (basado en el demo)
+const lightTheme = createTheme({
+  palette: {
+    mode: 'light',
+    primary: {
+      main: '#4285f4', // Azul como en el demo
+      light: '#60a5fa',
+      dark: '#2563eb',
+      contrastText: '#ffffff',
+    },
+    secondary: {
+      main: '#ec4899', // Rosa como en el botón de donar
+      light: '#f472b6',
+      dark: '#db2777',
+      contrastText: '#ffffff',
+    },
+    background: {
+      default: '#f8f9fa', // Fondo gris claro como en el demo
+      paper: '#ffffff',
+    },
+    text: {
+      primary: '#202124', // Color de texto oscuro
+      secondary: '#5f6368', // Color de texto gris
+    },
+  },
+  typography: {
+    fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
+    h1: { fontWeight: 700 },
+    h2: { fontWeight: 700 },
+    h3: { fontWeight: 600 },
+    h4: { fontWeight: 600 },
+    h5: { fontWeight: 600 },
+    h6: { fontWeight: 600 },
+  },
+  shape: {
+    borderRadius: 8,
+  },
+  components: {
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          textTransform: 'none',
+          borderRadius: 20, // Botones más redondeados como en el demo
+          fontWeight: 500,
+        },
+      },
+    },
+    MuiPaper: {
+      styleOverrides: {
+        root: {
+          borderRadius: 8,
+          boxShadow: '0 1px 2px 0 rgba(60, 64, 67, 0.3), 0 1px 3px 1px rgba(60, 64, 67, 0.15)',
+        },
+      },
+    },
+  },
+});
+
+// Tema oscuro (basado en el mismo estilo)
+const darkTheme = createTheme({
+  palette: {
+    mode: 'dark',
+    primary: {
+      main: '#4285f4', // Azul
+      light: '#60a5fa',
+      dark: '#2563eb',
+      contrastText: '#ffffff',
+    },
+    secondary: {
+      main: '#ec4899', // Rosa
+      light: '#f472b6',
+      dark: '#db2777',
+      contrastText: '#ffffff',
+    },
+    background: {
+      default: '#202124', // Fondo oscuro como en modo oscuro de Google
+      paper: '#303134',
+    },
+    text: {
+      primary: '#ffffff',
+      secondary: '#bdc1c6',
+    },
+  },
+  typography: {
+    fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
+    h1: { fontWeight: 700 },
+    h2: { fontWeight: 700 },
+    h3: { fontWeight: 600 },
+    h4: { fontWeight: 600 },
+    h5: { fontWeight: 600 },
+    h6: { fontWeight: 600 },
+  },
+  shape: {
+    borderRadius: 8,
+  },
+  components: {
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          textTransform: 'none',
+          borderRadius: 20,
+          fontWeight: 500,
+        },
+      },
+    },
+    MuiPaper: {
+      styleOverrides: {
+        root: {
+          borderRadius: 8,
+          boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.3), 0 1px 3px 1px rgba(0, 0, 0, 0.15)',
+        },
+      },
+    },
+  },
+});
+
 export default function MyApp(props) {
   const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
   
   // Estado para controlar el modo (tema claro/oscuro)
-  const [mode, setMode] = React.useState('light');
+  const [mode, setMode] = React.useState('light'); // Comenzar con tema claro como en el demo
   
   // Determina el tema inicial basado en localStorage y preferencias del sistema
   React.useEffect(() => {
-    // Verificar si es el modo oscuro del sistema
-    const prefersDarkMode = 
-      typeof window !== 'undefined' ? 
-      window.matchMedia('(prefers-color-scheme: dark)').matches : 
-      false;
-    
-    // Obtener el modo del tema del localStorage o usar el predeterminado
-    const storedThemeMode = 
-      typeof window !== 'undefined' ? 
-      localStorage.getItem('themeMode') : 
-      null;
-    
-    setMode(storedThemeMode || (prefersDarkMode ? 'dark' : 'light'));
+    if (typeof window !== 'undefined') {
+      // Obtener el modo del tema del localStorage
+      const storedThemeMode = localStorage.getItem('themeMode');
+      
+      if (storedThemeMode) {
+        setMode(storedThemeMode);
+      } else {
+        // Si no hay tema guardado, usar el tema claro por defecto (como en el demo)
+        setMode('light');
+      }
+    }
   }, []);
   
   // Función para alternar entre temas
@@ -54,71 +168,10 @@ export default function MyApp(props) {
     [],
   );
   
-  // Crear el tema basado en el modo actual
+  // Seleccionar tema basado en el modo
   const theme = React.useMemo(
-    () =>
-      createTheme({
-        palette: {
-          mode,
-          primary: {
-            main: '#3b82f6', // Azul
-            light: '#60a5fa',
-            dark: '#2563eb',
-            contrastText: '#ffffff',
-          },
-          secondary: {
-            main: '#ec4899', // Rosa
-            light: '#f472b6',
-            dark: '#db2777',
-            contrastText: '#ffffff',
-          },
-          background: {
-            default: mode === 'light' ? '#f8fafc' : '#0f172a',
-            paper: mode === 'light' ? '#ffffff' : '#1e293b',
-          },
-          text: {
-            primary: mode === 'light' ? '#0f172a' : '#f1f5f9',
-            secondary: mode === 'light' ? '#4b5563' : '#cbd5e1',
-          },
-        },
-        typography: {
-          fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
-          h1: { fontWeight: 700 },
-          h2: { fontWeight: 700 },
-          h3: { fontWeight: 600 },
-          h4: { fontWeight: 600 },
-          h5: { fontWeight: 600 },
-          h6: { fontWeight: 600 },
-        },
-        shape: {
-          borderRadius: 8,
-        },
-        components: {
-          MuiButton: {
-            styleOverrides: {
-              root: {
-                textTransform: 'none',
-                borderRadius: 8,
-                boxShadow: 'none',
-                fontWeight: 500,
-                '&:hover': {
-                  boxShadow: mode === 'light' ? 
-                    '0 3px 6px rgba(0, 0, 0, 0.1)' : 
-                    '0 3px 6px rgba(0, 0, 0, 0.2)',
-                },
-              },
-            },
-          },
-          MuiPaper: {
-            styleOverrides: {
-              root: {
-                borderRadius: 12,
-              },
-            },
-          },
-        },
-      }),
-    [mode],
+    () => (mode === 'light' ? lightTheme : darkTheme),
+    [mode]
   );
 
   return (

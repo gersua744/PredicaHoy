@@ -8,3 +8,26 @@
 [build.environment]
   NEXT_USE_NETLIFY_EDGE = "true"
   NODE_VERSION = "18"
+  # Habilitar caché de compilación
+  NEXT_TURBO = "true"
+
+[build.processing]
+  skip_processing = false
+
+[build.processing.css]
+  bundle = true
+  minify = true
+
+[build.processing.js]
+  bundle = true
+  minify = true
+
+[build.processing.html]
+  pretty_urls = true
+
+[build.processing.images]
+  compress = true
+
+# Configuración de caché
+[[plugins]]
+  package = "netlify-plugin-cache-nextjs"

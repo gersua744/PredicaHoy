@@ -20,7 +20,7 @@ const DonationModal = require('./DonationModal');
 const Header = () => {
   const theme = useTheme();
   const colorMode = useContext(ColorModeContext);
-  const [donationModalOpen, useState(false);
+  const [donationModalOpen, setDonationModalOpen] = useState(false); // Corregido aquí
 
   const handleDonateClick = () => {
     setDonationModalOpen(true);

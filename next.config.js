@@ -8,6 +8,10 @@ const nextConfig = {
   images: {
     domains: ['images.unsplash.com'],
   },
+  swcMinify: false, // Deshabilitar SWC minify
+  experimental: {
+    forceSwcTransforms: false, // Deshabilitar SWC transforms
+  }
 }
 
 module.exports = nextConfig

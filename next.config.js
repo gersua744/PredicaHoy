@@ -22,8 +22,13 @@ const nextConfig = {
     }
     return config;
   },
-  // Optimización para Netlify
-  output: 'standalone',
+  // Habilitar caché de compilación
+  experimental: {
+    // Esta es la configuración para la caché de compilación
+    turbotrace: {
+      logLevel: 'error',
+    },
+  },
 }
 
 module.exports = nextConfig

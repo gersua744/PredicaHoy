@@ -1,6 +1,5 @@
-const React = require('react');
-const { useState, useContext } = React;
-const { 
+import React, { useState } from 'react';
+import { 
   Box, 
   AppBar, 
   Toolbar, 
@@ -9,19 +8,20 @@ const {
   IconButton,
   Container,
   useTheme
-} = require('@mui/material');
-const BookIcon = require('@mui/icons-material/Book').default;
-const FavoriteIcon = require('@mui/icons-material/Favorite').default;
-const LightModeIcon = require('@mui/icons-material/LightMode').default;
-const DarkModeIcon = require('@mui/icons-material/DarkMode').default;
-const { ColorModeContext } = require('../pages/_app');
-const DonationModal = require('./DonationModal');
+} from '@mui/material';
+import MenuBookIcon from '@mui/icons-material/MenuBook';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import LightModeIcon from '@mui/icons-material/LightMode';
+import DarkModeIcon from '@mui/icons-material/DarkMode';
+import { useThemeContext } from '../contexts/ThemeContext';
+import DonationModal from './DonationModal';
 
 const Header = () => {
-  const theme = useTheme();
-  const colorMode = useContext(ColorModeContext);
-  const [donationModalOpen, setDonationModalOpen] = useState(false); // Corregido aquí
+  const theme = useTheme();  // Obtiene el tema actual
+  const { colorMode } = useThemeContext();  // Obtiene funciones para cambiar el tema
+  const [donationModalOpen, setDonationModalOpen] = useState(false);  // Estado para controlar la visibilidad del modal
 
+  // Función para abrir el modal de donación
   const handleDonateClick = () => {
     setDonationModalOpen(true);
   };
@@ -32,22 +32,22 @@ const Header = () => {
         position="static" 
         elevation={1}
         sx={{ 
-          py: 1,
-          bgcolor: theme.palette.background.paper,
-          color: theme.palette.text.primary
+          py: 1,  // padding vertical
+          bgcolor: theme.palette.mode === 'light' ? 'white' : 'grey.900',  // Color de fondo según tema
+          color: theme.palette.mode === 'light' ? 'grey.800' : 'white',     // Color de texto según tema
         }}
       >
         <Container maxWidth="lg">
           <Toolbar disableGutters sx={{ minHeight: 64 }}>
             {/* Logo */}
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
-              <BookIcon sx={{ fontSize: 32, color: 'primary.main', mr: 1 }} />
+              <MenuBookIcon sx={{ fontSize: 28, color: 'primary.main', mr: 1 }} />  {/* Icono del logo */}
               <Typography variant="h6" component="h1" fontWeight="bold">
-                PredicaHoy
+                PredicaHoy  {/* Nombre de la aplicación */}
               </Typography>
             </Box>
             
-            <Box sx={{ flexGrow: 1 }} />
+            <Box sx={{ flexGrow: 1 }} />  {/* Espaciador flexible */}
             
             {/* Botones de acción */}
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
@@ -55,51 +55,44 @@ const Header = () => {
                 variant="contained" 
                 color="secondary" 
                 size="medium"
-                startIcon={<FavoriteIcon />}
-                onClick={handleDonateClick}
+                startIcon={<FavoriteBorderIcon />}
+                onClick={handleDonateClick}  /* Abre el modal de donación */
                 sx={{ 
-                  borderRadius: 50,
+                  borderRadius: 50,   
                   textTransform: 'none',
                   px: 3,
                   py: 1,
-                  bgcolor: '#ec4899',
-                  '&:hover': {
-                    bgcolor: '#db2777',
-                  },
-                  fontWeight: 500,
-                  boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
+                  fontWeight: 500
                 }}
               >
-                Donar
+                Donar  {/* Botón de donar */}
               </Button>
               
               <IconButton 
-                onClick={colorMode?.toggleColorMode} // Usar el operador ? para evitar errores
+                onClick={colorMode.toggleColorMode}  /* Cambia entre tema claro y oscuro */
                 sx={{ 
-                  p: 1, 
                   ml: 1,
-                  bgcolor: theme.palette.mode === 'light' ? 'grey.100' : 'grey.800',
-                  color: theme.palette.mode === 'light' ? 'grey.700' : 'grey.300',
-                  borderRadius: '50%'
+                  color: theme.palette.mode === 'light' ? 'orange' : 'white'
                 }}
               >
-                {theme.palette.mode === 'light' ? 
-                  <DarkModeIcon /> : 
-                  <LightModeIcon />
-                }
+               {theme.palette.mode === 'light' ? (
+                    <DarkModeIcon /> 
+                  ) : (
+                    <LightModeIcon />
+                  )}
               </IconButton>
             </Box>
           </Toolbar>
         </Container>
       </AppBar>
       
-      {/* Modal de donaciones */}
+      {/* Modal de donaciones - se muestra solo cuando donationModalOpen es true */}
       <DonationModal 
         open={donationModalOpen}
-        onClose={() => setDonationModalOpen(false)}
+        onClose={() => setDonationModalOpen(false)}  /* Función para cerrar el modal */
       />
     </>
   );
 };
 
-module.exports = Header;
+export default Header;
